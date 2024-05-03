@@ -5,6 +5,8 @@ from newsapi import NewsApiClient
 import numpy as np
 import pandas as pd
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import sys
+sys.path.insert(0, '..')
 from data_extraction import fetch_news_data
 from data_extraction import fetch_stock_data
 import matplotlib.pyplot as plt
@@ -32,7 +34,7 @@ def main():
 
         # Check if image URL is available
         if pd.isnull(most_recent_article['Image URL']):
-            image_url = "https://images.app.goo.gl/KCGEokboUJS6kUPJA"  # Default image URL
+            image_url = "Images/logo.png"  # Default image incase 'Image Url' is unavailable
         else:
             image_url = most_recent_article['Image URL']   
         st.image(image_url, caption='Latest News Image', use_column_width=True)
@@ -116,12 +118,27 @@ def main():
             title='Compound Polarity Scores of All Articles'
         ).interactive()
 
+        # Calculate value counts of sentiment category
+        value_counts = pfizer_df['sentiment_category'].value_counts().reset_index()
+        value_counts.columns = ['Sentiment', 'Count']
+
+        # Create pie chart using Altair
+        pie_chart = alt.Chart(value_counts).mark_arc().encode(
+            color='Sentiment',
+            tooltip=['Sentiment', 'Count']
+        ).properties(
+            title='Sentiment Category Distribution'
+        ).mark_arc().encode(
+            theta='Count:Q',
+            color='Sentiment:N',
+            tooltip=['Sentiment', 'Count']
+        ).interactive()
 
         
         st.title('Pfizer News Analysis')
 
         # Dropdown for selecting different charts
-        chart_option = st.selectbox("Select Chart", ["Mean Compound Polarity Scores by Source", "Mean Compound Polarity Scores by Date", "Compound Polarity Scores of All Articles"])
+        chart_option = st.selectbox("Select Chart", ["Mean Compound Polarity Scores by Source", "Mean Compound Polarity Scores by Date", "Compound Polarity Scores of All Articles", "Sentiment Categories Pie Chart"])
 
         # Display selected chart
         if chart_option == "Mean Compound Polarity Scores by Source":
@@ -133,6 +150,8 @@ def main():
         elif chart_option == "Compound Polarity Scores of All Articles":
             st.write("## Compound Polarity Scores of All Articles")
             st.altair_chart(all_chart, use_container_width=True)
+        elif chart_option == "Sentiment Categories Pie Chart":
+            st.altair_chart(pie_chart, use_container_width=True)
 
 
 if __name__ == "__main__":
