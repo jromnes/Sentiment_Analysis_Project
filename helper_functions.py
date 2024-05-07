@@ -1,5 +1,5 @@
 from googletrans import Translator
-
+import logging
 
  # Define custom thresholds for sentiment categories
 thresholds = {
@@ -15,10 +15,20 @@ def categorize_sentiment(compound):
         if lower <= compound < upper:
             return sentiment
         
- # Function to translate non-English titles to English
+
+
+# Initialize logger
+logger = logging.getLogger(__name__)
+
+# Function to translate non-English titles to English
 def translate_to_english(text):
-    translator = Translator()
-    return translator.translate(text).text
+    try:
+        translator = Translator()
+        translated_text = translator.translate(text).text
+        return translated_text
+    except Exception as e:
+        logger.error("Error occurred during translation: %s", str(e))
+        return text
 
 
 

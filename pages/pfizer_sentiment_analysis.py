@@ -35,12 +35,9 @@ def main():
         fourth_article = pfizer_df.iloc[3]
         fifth_article = pfizer_df.iloc[4]
 
-        # Check if image URL is available
-        if pd.isnull(most_recent_article['Image URL']):
-            image_url = "Images/logo.png"  # Default image incase 'Image Url' is unavailable
-        else:
-            image_url = most_recent_article['Image URL']   
-        st.image(image_url, caption='Latest News Image', use_column_width=True)
+                
+        st.image("Images/logo.png", caption='Latest News Image', use_column_width=True)
+      
 
         # Making a subheader of the title with the article URL as a hyperlink
         title_with_link = f"[{most_recent_article['title']}]({most_recent_article['Article URL']})"
