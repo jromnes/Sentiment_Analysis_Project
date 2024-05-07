@@ -3,20 +3,29 @@ import streamlit as st
 from newsapi import NewsApiClient
 import numpy as np
 import pandas as pd
+import sys
+sys.path.insert(0, '..')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from data_extraction import fetch_news_data
-from data_extraction import fetch_stock_data
+from data_extraction import fetch_news_data, fetch_stock_data
+
+
 
 
 # Streamlit app
 def main():
     st.title('J&J News Sentiment Analysis')
+    # Cache expensive data fetching operations
+    @st.cache_data()
+    def load_data():
+        jnj_stock_df = fetch_stock_data('JNJ')
+        jnj_df = fetch_news_data('JNJ')
+        return jnj_stock_df, jnj_df
     
-    jnj_stock_df = fetch_stock_data('JNJ')
+    # Load data using caching
+    jnj_stock_df, jnj_df = load_data()
     st.line_chart(jnj_stock_df[['Returns']])
 
     # Fetch and preprocess news data
-    jnj_df = fetch_news_data('JNJ')
     
     # Group by date and calculate mean compound score
     jnj_mean = jnj_df.groupby('Date')['compound'].mean()

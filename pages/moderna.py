@@ -6,20 +6,24 @@ import pandas as pd
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import sys
 sys.path.insert(0, '..')
-from data_extraction import fetch_news_data
-from data_extraction import fetch_stock_data
+from data_extraction import fetch_news_data, fetch_stock_data
 import matplotlib.pyplot as plt
 import altair as alt
 import os
 from wordcloud import WordCloud
 from matplotlib.colors import LinearSegmentedColormap
 
+# Cache expensive data fetching operations
+@st.cache_data()
+def load_data():
+    moderna_df = fetch_news_data('Moderna')
+    mrna_df = fetch_stock_data('MRNA')
+    return moderna_df, mrna_df
 
 def main():
     st.title('Moderna News Sentiment Analysis')
-    # Fetch and preprocess news and stock data
-    moderna_df = fetch_news_data('Moderna')
-    mrna_df = fetch_stock_data('MRNA')
+ # Load data using caching
+    moderna_df, mrna_df = load_data()
  # Group by date and calculate mean compound score
     moderna_mean = moderna_df.groupby('Date')['compound'].mean()
     # Filter out dates with no articles

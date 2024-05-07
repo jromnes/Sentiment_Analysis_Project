@@ -7,18 +7,21 @@ import pandas as pd
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import sys
 sys.path.insert(0, '..')
-from data_extraction import fetch_news_data
-from data_extraction import fetch_stock_data
+from data_extraction import fetch_news_data, fetch_stock_data
 import matplotlib.pyplot as plt
 import altair as alt
+
+@st.cache_data()
+def load_data():
+    pfizer_df = fetch_news_data('Pfizer')
+    pfe_df = fetch_stock_data('PFE')
+    return pfizer_df, pfe_df
 
 # Streamlit app
 def main():
     st.title('Pfizer News Sentiment Analysis')
 
-    # Fetch and preprocess news and stock data
-    pfizer_df = fetch_news_data('Pfizer')
-    pfe_df = fetch_stock_data('PFE')
+    pfizer_df, pfe_df = load_data()
     # Create two columns layout
     headlines_column, charts_column = st.columns([2, 3])
 
