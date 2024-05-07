@@ -1,12 +1,6 @@
 # Import necessary libraries
 import streamlit as st
 from newsapi import NewsApiClient
-import numpy as np
-import pandas as pd
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from sklearn.decomposition import LatentDirichletAllocation
-from sklearn.feature_extraction.text import CountVectorizer
-import matplotlib.pyplot as plt
 import altair as alt
 import sys
 sys.path.insert(0, '..')

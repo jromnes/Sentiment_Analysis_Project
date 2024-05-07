@@ -1,10 +1,6 @@
 # Import necessary libraries
-
 import streamlit as st
 from newsapi import NewsApiClient
-import numpy as np
-import pandas as pd
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import sys
 sys.path.insert(0, '..')
 from data_extraction import fetch_news_data, fetch_stock_data
