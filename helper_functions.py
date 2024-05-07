@@ -1,5 +1,5 @@
 from googletrans import Translator
-import plotly.graph_objs as go
+
 
  # Define custom thresholds for sentiment categories
 thresholds = {
