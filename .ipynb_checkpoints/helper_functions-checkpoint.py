@@ -1,5 +1,7 @@
 from googletrans import Translator
 import logging
+from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.feature_extraction.text import CountVectorizer
 
  # Define custom thresholds for sentiment categories
 thresholds = {
@@ -29,6 +31,28 @@ def translate_to_english(text):
     except Exception as e:
         logger.error("Error occurred during translation: %s", str(e))
         return text
+
+# Function to perform topic modeling using LDA
+def topic_modeling_lda(data, n_topics=5):
+    # Vectorize text data using CountVectorizer
+    count_vectorizer = CountVectorizer(max_df=0.95, min_df=2, stop_words='english')
+    tf = count_vectorizer.fit_transform(data['title'])
+
+    # Fit LDA model
+    lda = LatentDirichletAllocation(n_components=n_topics, random_state=0)
+    lda.fit(tf)
+
+    # Get feature names
+    feature_names = count_vectorizer.get_feature_names_out()
+
+    # Display top words for each topic
+    topics = []
+    for topic_idx, topic in enumerate(lda.components_):
+        top_words_idx = topic.argsort()[:-6:-1]  # Get the top 5 words
+        top_words = [feature_names[i] for i in top_words_idx]
+        topics.append(f"Topic {topic_idx + 1}: {' | '.join(top_words)}")
+    
+    return topics
 
 
 

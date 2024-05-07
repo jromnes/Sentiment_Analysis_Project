@@ -153,6 +153,5 @@ def main():
         elif chart_option == "Sentiment Categories Pie Chart":
             st.altair_chart(pie_chart, use_container_width=True)
 
-
 if __name__ == "__main__":
     main()

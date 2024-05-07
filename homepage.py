@@ -13,9 +13,6 @@ def main():
     st.subheader("NLTK Library & Vader Polarity Scores")
     st.markdown("This video is what was utilized as a resource for us to learn about NLTK Library!")
     st.video("https://youtu.be/o-zM8onpQZY?si=WOZh3hJjXGkhIiPJ&t=1347")
-    
-    
-
 
 if __name__ == "__main__":
     main()

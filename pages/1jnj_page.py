@@ -9,23 +9,22 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from data_extraction import fetch_news_data, fetch_stock_data
 
 
-
-
-# Streamlit app
-def main():
-    st.title('J&J News Sentiment Analysis')
-    # Cache expensive data fetching operations
-    @st.cache_data()
-    def load_data():
+# Cache expensive data fetching operations
+@st.cache_data()
+def load_data():
         jnj_stock_df = fetch_stock_data('JNJ')
         jnj_df = fetch_news_data('JNJ')
         return jnj_stock_df, jnj_df
     
+
+# Streamlit app
+def main():
+    st.title('J&J News Sentiment Analysis')
+
     # Load data using caching
     jnj_stock_df, jnj_df = load_data()
     st.line_chart(jnj_stock_df[['Returns']])
 
-    # Fetch and preprocess news data
     
     # Group by date and calculate mean compound score
     jnj_mean = jnj_df.groupby('Date')['compound'].mean()
@@ -42,8 +41,6 @@ def main():
         st.table(jnj_df[['Time', 'title', 'sentiment_category']])
     else:
         st.write("No articles found for the selected date range.")
-
-    
 
 if __name__ == "__main__":
     main()
