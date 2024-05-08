@@ -2,11 +2,13 @@
 import streamlit as st
 from newsapi import NewsApiClient
 import sys
-sys.path.insert(0, '..')
+sys.path.insert(0, '..') #Helps define path in order to pull functions from data_extraction & helper_functions
 from data_extraction import fetch_news_data, fetch_stock_data
 import matplotlib.pyplot as plt
 import altair as alt
+from helper_functions import categorize_sentiment
 
+#Caching Data to improve app performance
 @st.cache_data()
 def load_data():
     pfizer_df = fetch_news_data('Pfizer')
@@ -18,24 +20,42 @@ def main():
     st.title('Pfizer News Sentiment Analysis')
 
     pfizer_df, pfe_df = load_data()
-    # Create two columns layout
+    
+    # Calculate overall comound score by averaging all compound scores within pfizer_df
+    overall_score = round(pfizer_df['compound'].mean(), 3)
+
+    # Categorize overall score into sentiment category
+    overall_sentiment = categorize_sentiment(overall_score)
+    # Define color scale for sentiment categories
+    color_scale = {
+        'Negative': 'red',
+        'Slightly Negative': 'lightcoral',
+        'Neutral': 'white',
+        'Slightly Positive': 'lightgreen',
+        'Positive': 'green'
+    }
+    # 
+    st.markdown(f"<h1 style='text-align: center;'>Overall Compound score for Pfizer: <span style='color:{color_scale[overall_sentiment]}'>{overall_score}</span></h1>", unsafe_allow_html=True)
+    st.markdown(f"<h2 style='text-align: center;'>Overall Sentiment Category: <span style='color:{color_scale[overall_sentiment]}'>{overall_sentiment}</span></h2>", unsafe_allow_html=True)
+    # Defining two separate columns: one for headlines, one for visualizations
     headlines_column, charts_column = st.columns([2, 3])
 
     with headlines_column:    
+        # Header for Latest headlines
         st.header('Latest Pfizer News Headlines', divider='grey')
 
-        # Get the most recent article
+        # Get the 5 most recent article
         most_recent_article = pfizer_df.iloc[0]
         second_article = pfizer_df.iloc[1]
         third_article = pfizer_df.iloc[2]
         fourth_article = pfizer_df.iloc[3]
         fifth_article = pfizer_df.iloc[4]
 
-                
-        st.image("Images/logo.png", caption='Latest News Image', use_column_width=True)
+               
+        st.image("Images/logo.png", use_column_width=True)
       
 
-        # Making a subheader of the title with the article URL as a hyperlink
+        # setting subheaders of the titles with the article URLs as a hyperlinks within the displayed title
         title_with_link = f"[{most_recent_article['title']}]({most_recent_article['Article URL']})"
         second_title_with_link = f"[{second_article['title']}]({second_article['Article URL']})"
         third_title_with_link = f"[{third_article['title']}]({third_article['Article URL']})"
@@ -136,7 +156,7 @@ def main():
         # Dropdown for selecting different charts
         chart_option = st.selectbox("Select Chart", ["Mean Compound Polarity Scores by Source", "Mean Compound Polarity Scores by Date", "Compound Polarity Scores of All Articles", "Sentiment Categories Pie Chart"])
 
-        # Display selected chart
+        # Select dropdown options
         if chart_option == "Mean Compound Polarity Scores by Source":
             st.write("## Mean Compound Scores by Source")
             st.altair_chart(sources_chart, use_container_width=True)

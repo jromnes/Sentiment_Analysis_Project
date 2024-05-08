@@ -8,6 +8,7 @@ import altair as alt
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from matplotlib.colors import LinearSegmentedColormap
+from helper_functions import categorize_sentiment
 
 # Cache expensive data fetching operations
 @st.cache_data()
@@ -15,7 +16,6 @@ def load_data():
     moderna_df = fetch_news_data('Moderna')
     mrna_df = fetch_stock_data('MRNA')
     return moderna_df, mrna_df
-
 def main():
     st.title('Moderna News Sentiment Analysis')
  # Load data using caching
@@ -47,14 +47,44 @@ def main():
     sentiment_cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=100)
     # Generate word cloud
     wordcloud = WordCloud(width=800, height=400, colormap=sentiment_cmap).generate_from_frequencies(word_freq)
+# Overall sentiment score
+    overall_score = round(moderna_df['compound'].mean(), 3)
+   # Categorize overall score into sentiment category
+    overall_sentiment = categorize_sentiment(overall_score)
+    # Define color scale for sentiment categories
+    color_scale = {
+        'Negative': 'red',
+        'Slightly Negative': 'lightcoral',
+        'Neutral': 'white',
+        'Slightly Positive': 'lightgreen',
+        'Positive': 'green'
+    }
+    # Display the input and overall sentiment
+    st.markdown(f"<h1 style='text-align: center;'>Overall Compound score : <span style='color:{color_scale[overall_sentiment]}'>{overall_score}</span></h1>", unsafe_allow_html=True)
+    st.markdown(f"<h2 style='text-align: center;'>Overall Sentiment Category: <span style='color:{color_scale[overall_sentiment]}'>{overall_sentiment}</span></h2>", unsafe_allow_html=True)
     # Plot word cloud
     plt.figure(figsize=(10, 6))
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')
     plt.show()
-    
     st.title("Word Cloud of News Titles")
     st.image(wordcloud.to_array(), use_column_width=True)
-    
+# Pie chart expressing sentiment values
+    sentiment_counts = moderna_df['compound'].apply(categorize_sentiment).value_counts()
+    labels = sentiment_counts.index.tolist()
+    sizes = sentiment_counts.values.tolist()
+    colors = [color_scale[sentiment] for sentiment in labels]
+    fig, ax = plt.subplots()
+    ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+# Display the pie chart
+    st.pyplot(fig)
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
