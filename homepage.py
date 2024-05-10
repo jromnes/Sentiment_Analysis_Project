@@ -1,6 +1,9 @@
 import streamlit as st
 
 def main():
+    # Sets the streamlit-app page layout to wide mode
+    st.set_page_config(layout="wide")
+
     st.title("Welcome to Our Sentiment Analysis Streamlit App!")
     st.markdown("Below are some useful videos to understand some of the techniques and libraries we used to build this app!")
     
