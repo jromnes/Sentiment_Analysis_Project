@@ -63,7 +63,7 @@ The Sentiment Analysis Project utilizes Streamlit, a Python library for building
 
 4. **Explore and Analyze**: Explore the interactive dashboard, fetch live news data, perform sentiment analysis, and analyze sentiment trends to gain insights into market sentiment.
 
-## Contiunation of Project
+## Continuation of Project
 
 • Improve the speed of the application.
 
@@ -79,3 +79,10 @@ The Sentiment Analysis Project utilizes Streamlit, a Python library for building
 - [Kaggle Dataset for COVID-19 Vaccine Sentiment Analysis](https://www.kaggle.com/code/twhelan/covid-19-vaccine-sentiment-analysis-with-fastai)
 - [Tableau Blog: How to Visualize Sentiment and Inclination](https://www.tableau.com/blog/how-visualize-sentiment-and-inclination-48534)
 
+#### Credit and Contributors
+    Nick Wuebben
+    Github: Nawuebb
+    Jordan Romnes
+    Github: jromnes
+    Minh Nguyen
+    Github: realminhnguyen
