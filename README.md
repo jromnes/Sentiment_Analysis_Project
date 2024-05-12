@@ -63,6 +63,21 @@ The Sentiment Analysis Project utilizes Streamlit, a Python library for building
 
 4. **Explore and Analyze**: Explore the interactive dashboard, fetch live news data, perform sentiment analysis, and analyze sentiment trends to gain insights into market sentiment.
 
+## Examples of Running Application
+
+![alt text](Images/homepage.png)
+*The homepage features videos explaining some of the techical tools used in this project*
+
+### Each individual page features different ways to visualize sentiment analysis results
+---
+![alt text](Images/jnj_page.png)
+
+![alt text](Images/moderna_page.png)
+
+![alt text](Images/pfizer_page.png)
+
+![alt text](Images/experimental_page.png)
+*Users can search a stock of their choosing and receive an overall sentiment score based on News titles regarding that stock.*
 ## Continuation of Project
 
 • Improve the speed of the application.
