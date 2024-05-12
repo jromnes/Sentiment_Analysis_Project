@@ -69,6 +69,8 @@ The Sentiment Analysis Project utilizes Streamlit, a Python library for building
 
 • Potentially add a customizable dashboard with Streamlit Elements. 
 
+• Transform the Streamlit app into a standalone website using HTML, CSS, and JavaScript for greater customization and interactivity
+
 #### Sources Used:
 
 
