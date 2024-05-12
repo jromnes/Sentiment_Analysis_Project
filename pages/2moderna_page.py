@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from matplotlib.colors import LinearSegmentedColormap
 from helper_functions import categorize_sentiment
-
 # Cache expensive data fetching operations
 @st.cache_data()
 def load_data():
@@ -17,9 +16,19 @@ def load_data():
     mrna_df = fetch_stock_data('MRNA')
     return moderna_df, mrna_df
 def main():
-    st.title('Moderna News Sentiment Analysis')
+    st.title('**Moderna News Sentiment Analysis**')
  # Load data using caching
     moderna_df, mrna_df = load_data()
+ # Returns over time
+    st.header('**Recent Pfizer Stock Returns**')
+    # Daily Returns from Moderna (MRNA) over last 30 Days
+    returns_chart = alt.Chart(mrna_df.reset_index()).mark_line(color='lightgray').encode(
+        x='Date:T',
+        y='Returns:Q'
+    ).properties(
+        title='Daily Returns of Moderna Stock Over the Last 30 Days'
+    ).interactive()
+    st.altair_chart(returns_chart, use_container_width=True)
  # Group by date and calculate mean compound score
     moderna_mean = moderna_df.groupby('Date')['compound'].mean()
     # Filter out dates with no articles
@@ -74,17 +83,14 @@ def main():
     labels = sentiment_counts.index.tolist()
     sizes = sentiment_counts.values.tolist()
     colors = [color_scale[sentiment] for sentiment in labels]
+# Plotting the pie chart
     fig, ax = plt.subplots()
-    ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+    ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90, shadow=False)
     ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+# Title and Legend
+    ax.set_title('Pie Chart Distribution of Sentiment Categories')
+    ax.legend(labels, loc='lower left')
 # Display the pie chart
     st.pyplot(fig)
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
